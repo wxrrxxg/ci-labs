@@ -3,9 +3,24 @@ name: Node.js CI
 on:
   push:
     branches: [main]
+    paths:
+      - '*.js'
+      - 'package.json'
 
   pull_request:
     branches: [main]
+
+  workflow_dispatch:
+    inputs:
+      log_level:
+        description: 'Log verbosity'
+        required: false
+        default: 'info'
+        type: choice
+        options:
+          - info
+          - debug
+          - warn
 
 jobs:
   build-and-test:
@@ -32,3 +47,6 @@ jobs:
           name: app-build
           path: dist/
           retention-days: 7
+
+        -name: Show log level
+        run: echo "Log level is ${{ github.event.inputs.log_level || 'not set' }}"

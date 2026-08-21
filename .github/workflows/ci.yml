@@ -48,5 +48,5 @@ jobs:
           path: dist/
           retention-days: 7
 
-        -name: Show log level
+      - name: Show log level
         run: echo "Log level is ${{ github.event.inputs.log_level || 'not set' }}"

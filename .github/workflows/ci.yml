@@ -9,6 +9,10 @@ on:
 
   workflow_dispatch:
 
+env:
+  APP_NAME: ci-labs
+  NODE_VERSION: '20'
+
 jobs:
   lint:
     name: Lint Code
@@ -30,9 +34,14 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ env.NODE_VERSION }}
 
       - run: npm test
+
+      - name: Use secret
+        run: echo "Secret length is ${#DEPLOY_TOKEN}"
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
 
   security-scan:
     name: Security Scan
@@ -55,7 +64,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ env.NODE_VERSION }}
 
       - run: npm run build
 
@@ -72,3 +81,15 @@ jobs:
 
     steps:
       - run: echo "Build succeeded on main! Would send a Slack/email notification here."
+
+
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: [build]
+    environment:
+      name: staging
+
+    steps:
+      - run: echo "Deploying ${{ env.APP_NAME }} to staging..."
+      - run: echo "Using staging key: ${{ secrets.STAGING_KEY }}"

@@ -21,7 +21,7 @@ function assert(name, actual, expected) {
     }
 }
 
-assert('add 2+3', add(2, 3), 90);
+assert('add 2+3', add(2, 3), 5);
 assert('add -1+1', add(-1, 1), 0);
 assert('subtract 5-3', subtract(5, 3), 2);
 assert('subtract 0-5', subtract(0, 5), -5);

@@ -92,4 +92,4 @@ jobs:
 
     steps:
       - run: echo "Deploying ${{ env.APP_NAME }} to staging..."
-      - run: echo "Using staging key: ${{ secrets.STAGING_KEY }}"
+      - run: echo "Using staging key ${{ secrets.STAGING_KEY }}"

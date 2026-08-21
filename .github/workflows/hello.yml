@@ -1,0 +1,22 @@
+name: Hello CI
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  greet:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Say hello
+        run: echo "Hello from GitHub Actions!"
+
+      - name: Show the date
+        run: date
+
+      - name: Show the runner OS
+        run: uname -a
+
+      - name: List files in the repo
+        run: ls -la

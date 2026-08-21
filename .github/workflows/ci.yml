@@ -1,4 +1,4 @@
-name: Multi-Job CI
+name: CI
 
 on:
   push:
@@ -10,65 +10,18 @@ on:
   workflow_dispatch:
 
 jobs:
-  lint:
-    name: Lint Code
-    runs-on: ubuntu-latest
+  ci:
+    name: Build and Test
+    uses: ./.github/workflows/reusable-build.yml
+    with:
+      node-version: '20'
+      run-lint: true
+    secrets: inherit
 
-    steps:
-      - uses: actions/checkout@v4
-
-      - run: echo "Checking code style..."
-
-      - run: echo "Lint passed!"
-
-  test:
-    name: Run Tests
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - run: npm test
-
-  security-scan:
-    name: Security Scan
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - run: echo "Scanning for vulnerabilities..."
-
-      - run: echo "No vulnerabilities found!"
-
-  build:
-    name: Build Application
-    runs-on: ubuntu-latest
-    needs: [lint, test, security-scan]
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - run: npm run build
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: app-build
-          path: dist/
-
-  notify:
-    name: Send Notification
-    runs-on: ubuntu-latest
-    needs: [build]
-    if: github.ref == 'refs/heads/main'
-
-    steps:
-      - run: echo "Build succeeded on main! Would send a Slack/email notification here."
+  ci-node18:
+    name: Build and Test (Node 18)
+    uses: ./.github/workflows/reusable-build.yml
+    with:
+      node-version: '18'
+      run-lint: false
+    secrets: inherit

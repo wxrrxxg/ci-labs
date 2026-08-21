@@ -31,3 +31,6 @@ console.log('\nResults: ' + passed + ' passed, ' + failed + ' failed');
 if (failed > 0) {
     process.exit(1);
 }
+
+const ver = parseInt(process.version.split('.')[0].substring(1));
+assert('Node version >= 20', ver >= 20 ? 'yes' : 'no', 'yes');

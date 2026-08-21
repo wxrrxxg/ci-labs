@@ -26,23 +26,26 @@ jobs:
       - run: echo "Lint passed!"
 
   test:
-    name: Run Tests
-    runs-on: ubuntu-latest
+    name: Test (Node ${{ matrix.node-version }}, ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node-version: ['18', '20']
 
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - run: npm ci
 
       - run: npm test
-
-      - name: Use secret
-        run: echo "Secret length is ${#DEPLOY_TOKEN}"
-        env:
-          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
 
   security-scan:
     name: Security Scan

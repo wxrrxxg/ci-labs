@@ -17,3 +17,11 @@ jobs:
       node-version: '20'
       run-lint: true
     secrets: inherit
+
+  ci-node18:
+    name: Build and Test (Node 18)
+    uses: ./.github/workflows/reusable-build.yml
+    with:
+      node-version: '18'
+      run-lint: false
+    secrets: inherit
